@@ -94,7 +94,7 @@ export default function Colonias() {
           <div className="text-sm font-semibold opacity-70">El detalle:</div>
           <div><b>Lo que publica SEGIAGUA hoy:</b> {sel.horario ? sel.horario.replace('SUMINISTRO', 'Suministro').toLowerCase().replace(/^s/, 'S') : 'no publica horario'}</div>
           <div>Tipo: {TIPO[sel.tipo]}{sel.horas ? ` · ${sel.horas} h al día` : ''} · Fuente: {sel.fuente || 'no indicada'} · ¿Hoy hay corte o falla anunciada («condición atípica»)? {sel.atip ? 'sí' : 'no'}</div>
-          <div><b>¿Iría un sensor aquí?</b> <span className="tag">{e.estado === 'estructural' ? 'SÍ' : (sel.tipo === 'sin_horario' || sel.atip) ? 'PENDIENTE' : 'NO POR AHORA'}</span> {e.texto}.
+          <div><b>¿Iría un sensor aquí?</b> <span className="tag">{e.estado === 'estructural' ? 'SÍ' : (sel.tipo === 'sin_horario' || sel.atip) ? 'PENDIENTE' : 'NO POR AHORA'}</span> {e.estado === 'pendiente' ? `Con condición atípica ${sel.dias_atip} de ${sel.dias_pull} ${sel.dias_pull === 1 ? 'día guardado' : 'días guardados'}` : e.texto}.
             <div className="text-xs opacity-80">Regla fijada el {CRITERIO_ATIPICAS.fijado}, antes de tener datos: estructural si es atípica en ≥21 de 28 días; decisión el {CRITERIO_ATIPICAS.decision}. El sensor va donde la ciudad no publica horario, no donde alguien lo pide.</div></div>
           <div><b>Lista fiscal de tandeo (ene-2024):</b> {sel.join === 'revision' || sel.join === 'posible' ? JOIN.posible : JOIN[sel.join]} <span className="tag">HIPÓTESIS</span>
             <div className="text-xs opacity-80">Verificar contra el PDF de la Gaceta. Lo que esto significa en el recibo no lo afirmamos aquí.</div></div>
