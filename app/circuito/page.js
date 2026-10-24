@@ -35,11 +35,13 @@ export default function Circuito() {
     const ids = s.aparatos.map((a) => a.id)
     // minutos por aparato y día (con la "llave cerrada" del tramposo si está activada: A-3 cierra 4 noches con buena entrega)
     const minutos = s.dias.map((d) => d.porAparato.map((p) => p.minutos))
-    if (tramposo) [1, 4, 8, 11].forEach((dia) => { minutos[dia][ids.indexOf('A-3')] = 0 })
+    // las 4 noches con la entrega más fuerte del circuito A (las "buenas"): ahí cerrar la llave es trampa visible
+    const buenas = s.dias.map((d, i) => ({ i, f: d.red[0].entrega ? d.red[0].cargaM * d.red[0].dur : 0 })).sort((a, b) => b.f - a.f).slice(0, 4).map((x) => x.i)
+    if (tramposo) buenas.forEach((dia) => { minutos[dia][ids.indexOf('A-3')] = 0 })
     // ML: eventos "llegó" por aparato -> similitud -> circuitos aprendidos (sin neutrales: ellos son control)
     const casas = s.aparatos.filter((a) => a.rol !== 'sitio neutral')
     const ev = casas.map((a) => s.dias.flatMap((d, n) => {
-      if (tramposo && a.id === 'A-3' && [1, 4, 8, 11].includes(n)) return []
+      if (tramposo && a.id === 'A-3' && buenas.includes(n)) return []
       return d.porAparato[ids.indexOf(a.id)].eventos.filter((e) => e.evento === 'llegó').map((e) => ({ noche: n, t: e.hora }))
     }))
     const lab = aglomerativo(similitud(ev, 60), 0.5)
