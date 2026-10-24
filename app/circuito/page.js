@@ -83,7 +83,7 @@ export default function Circuito() {
       <div className="card space-y-2" style={{ background: '#eef6f9' }}>
         <b>En corto: así se vería el registro de UN circuito (una válvula que surte a varias casas de {ca.col})</b>
         {(() => { const p = out.pubs[0].find((x) => x.r.estado === 'publicado'); return p ? (
-          <p>En la semana 1, la ciudad publicó <b>{ha.horas} horas</b> de agua al día. Medido en las llaves: la casa que menos recibió tuvo <b>{hm(p.r.min)}</b> al día, y la mitad de las casas recibió <b>{hm(p.r.mediana)}</b> o menos. Además hubo <b>{out.sinAgua[0]}</b> días de 14 sin nada de agua.</p>
+          <p>En la semana 1 (días 1 al 7), la ciudad publicó <b>{ha.horas} horas</b> de agua al día. Medido en las llaves, en promedio: la casa que menos recibió tuvo <b>{hm(p.r.min)}</b> al día, y la mitad de las casas recibió <b>{hm(p.r.mediana)}</b> o menos. En los 14 días hubo <b>{out.sinAgua[0]}</b> sin nada de agua en el sitio neutral.</p>
         ) : <p>Esta semana no hay suficientes aparatos funcionando para publicar: se dice «sin datos suficientes», nunca «0 horas».</p> })()}
         <p className="text-sm"><b>¿Por qué no dice qué casa es?</b> Porque el número no es contra la familia: es contra lo que publicó la ciudad. Si dijéramos qué casa recibió menos, cualquiera podría señalarla (y no sabemos si es por estar al final del tubo o por otra cosa). Por eso solo se publica cuando hay al menos 5 casas, y sin nombres.</p>
         <p className="text-xs opacity-80">Esto es una DEMOSTRACIÓN con aparatos inventados sobre el horario real de dos colonias de Iztapalapa. Tu colonia tendrá su registro cuando haya sensores.</p>
@@ -134,9 +134,9 @@ export default function Circuito() {
       </details>
 
       <div className="card space-y-2">
-        <b>Lo que ve solo el dueño del aparato (privado, nunca se publica)</b>
+        <b>Ejemplo inventado: lo que vería solo el dueño de un aparato en su propio teléfono</b>
         <label className="text-sm">Aparato <select value={casa} onChange={(e) => setCasa(e.target.value)} className="rounded border p-1">{out.casas.map((a) => <option key={a.id}>{a.id}</option>)}</select></label>
-        <p className="text-sm">La medición de una casa cuenta para ella sin que nadie la confirme.</p>
+        <p className="text-sm">Esto no se publica: es el registro de su propia casa y no necesita que nadie lo confirme. Una casa puede tener más días sin agua que el sitio neutral (por ejemplo, días de poca presión o con el aparato apagado).</p>
         <div className="overflow-x-auto"><table className="t"><thead><tr><th>Día</th><th>Agua ese día</th><th>Primera llegada</th></tr></thead>
           <tbody>{s.dias.map((d) => { const e = d.porAparato[iCasa].eventos.find((x) => x.evento === 'llegó'); return <tr key={d.dia}><td>{d.dia}</td><td>{out.minutos[d.dia - 1][iCasa] ? hm(out.minutos[d.dia - 1][iCasa]) : 'nada'}</td><td>{e ? hhmm(e.hora) : '—'}</td></tr> })}</tbody></table></div>
       </div>

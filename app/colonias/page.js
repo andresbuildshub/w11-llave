@@ -18,6 +18,17 @@ function queDice(r) {
   return h ? `agua ${dias}, de ${hora(h.inicio)} a ${hora(h.fin)} (${h.horas} horas)` : r.horario.toLowerCase()
 }
 
+function resumenTexto(r, d) {
+  const fecha = new Date(d.fecha_pull + 'T12:00:00').toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' })
+  const lista = r.join === 'exacto' ? 'sí aparece (lista de enero 2024; por confirmar en la Gaceta)' : r.join === 'fuera' ? 'no aparece (lista de enero 2024; por confirmar en la Gaceta)' : 'no es seguro (nombre parecido, en revisión)'
+  return `${r.col} (${r.alc[0] + r.alc.slice(1).toLowerCase()}): la página oficial de SEGIAGUA dice que la ciudad da ${queDice(r)}. Consultado el ${fecha}.\nLista de tandeo: ${lista}.\nFuente: SEGIAGUA «Agua en tu colonia», guardado por Llave: https://w11-llave.vercel.app/colonias`
+}
+async function compartir(r, d) {
+  const t = resumenTexto(r, d)
+  if (navigator.share) { try { await navigator.share({ text: t }); return } catch { /* cancelado */ } }
+  window.open('https://wa.me/?text=' + encodeURIComponent(t), '_blank', 'noopener')
+}
+
 function descargar(r, d) {
   const filas = [['fecha_guardado', 'alcaldia', 'colonia', 'horario_publicado', 'fuente', 'condicion_atipica']]
   // historial completo: el JSON publicado trae el último día; los anteriores viven en /data/historial (uno por fecha)
@@ -74,7 +85,7 @@ export default function Colonias() {
           <div className="rounded-lg p-3" style={{ background: '#eef6f9' }}>
             <b>En corto</b>
             <ul className="mt-1 list-disc pl-5">
-              <li>La ciudad dice: {queDice(sel)}.</li>
+              <li>La ciudad dice: {queDice(sel)}. <span className="text-xs">(Es lo publicado en la página oficial; si en ventanilla te dicen otro, éste es el oficial.)</span></li>
               <li>¿Sensor aquí? {e.estado === 'estructural' ? 'Sí: esta colonia está en la lista para el primer sensor.' : sel.tipo === 'sin_horario' || sel.atip ? `Todavía no se sabe: la ciudad no publica horario hoy. Se decide el ${CRITERIO_ATIPICAS.decision.slice(8)} de noviembre, viendo si eso pasa casi todos los días.` : 'Por ahora no: los primeros sensores van a colonias donde la ciudad no publica ningún horario. Tu colonia sí tiene uno publicado (aunque no se cumpla).'}</li>
               <li>¿En la lista de tandeo (la lista oficial de colonias que la ciudad reconoce que reciben agua por tandeo)? {sel.join === 'exacto' ? 'Sí aparece (lista de enero 2024, copiada por un noticiero; hay que confirmarla en la Gaceta).' : sel.join === 'fuera' ? 'No aparece, ni buscando nombres parecidos (lista de enero 2024; hay que confirmarla en la Gaceta).' : 'No es seguro: hay un nombre parecido que falta revisar a mano.'}</li>
             </ul>
@@ -89,8 +100,12 @@ export default function Colonias() {
             <div className="text-xs opacity-80">Verificar contra el PDF de la Gaceta. Lo que esto significa en el recibo no lo afirmamos aquí.</div></div>
           <div className="rounded-lg border p-3 text-sm">
             <b>Lo que puedes llevar hoy, sin sensor</b>
-            <p className="mt-1">El horario que la ciudad publica para tu colonia, con la fecha de cada día que lo guardamos. Si en ventanilla te dicen otro horario, este es el que aparece en la página oficial de SEGIAGUA. Cada mañana guardamos uno nuevo y no se borra ninguno.</p>
-            <button onClick={() => descargar(sel, d)} className="mt-2 rounded-lg px-3 py-2 font-semibold text-white" style={{ background: 'var(--agua)' }}>Descargar lo publicado ({d.pulls.length} {d.pulls.length === 1 ? 'día' : 'días'})</button>
+            <p className="mt-1">Este mensaje, con la fecha. Si en ventanilla te dicen otro horario, este es el que aparece en la página oficial de SEGIAGUA. Cada mañana guardamos uno nuevo y no se borra ninguno.</p>
+            <div className="mt-2 rounded-lg bg-white p-2 text-sm" style={{ whiteSpace: 'pre-wrap' }} aria-label="Resumen para compartir">{resumenTexto(sel, d)}</div>
+            <div className="mt-2 flex flex-wrap gap-2">
+              <button onClick={() => compartir(sel, d)} className="rounded-lg px-3 py-2 font-semibold text-white" style={{ background: '#1f8a4c' }}>Mandar por WhatsApp</button>
+              <button onClick={() => descargar(sel, d)} className="rounded-lg border px-3 py-2">Descargar tabla de todos los días ({d.pulls.length})</button>
+            </div>
             <p className="mt-2 text-xs opacity-80">¿Por qué no se puede pedir un sensor aquí? Porque el lugar lo decide el dato del tubo y no quién pide. Si lo decidiera quién pide, llegarían primero las colonias que más saben pedir. Los primeros van a donde la ciudad no publica ningún horario. Tu turno llega cuando esas tengan el suyo; hoy no tenemos fecha.</p>
           </div>
           <div className="text-sm"><b>Cuándo llega de verdad:</b> sin medición todavía en esta colonia. Mira <a className="underline" href="/circuito">cómo se vería el registro</a> (simulado).</div>
