@@ -113,3 +113,30 @@ Security floor: no secrets needed (no API keys), no personal data, no forms that
 - **Data check:** the built JSON reproduces the fight's numbers (2,006; 597 continuo; Iztapalapa 10/290; robust bound 58).
 - **E2E (Playwright vs prod):** every page loads; SIMULADO label present on `/circuito`; no per-house output anywhere; omissions count visible; mic page never sends audio (network interception: no request bodies with audio).
 - **Persona test:** Lupita, screenshots in order, 3 tasks.
+
+---
+
+## After the build (appended 2026-10-23; everything above was written before code, commit 0a112b2)
+
+- **Shipped:** all 5 success items at https://w11-llave.vercel.app. **Changed from the packet:** /lista-fiscal is a plain summary per alcaldía with the table folded. /colonias gained an "En corto" box, a WhatsApp-shareable dated summary, and a CSV of every saved day (persona rounds 2–3).
+- **Bugs the tests found:**
+  1. The "cheater" toggle used arbitrary nights.
+  2. The dose–response limit of 240 min never fires on real 4–5 h windows; recalibrated to 150.
+  3. 7-day schedules were misclassified, found by the persona (Iztapalapa 204 → 205 daily windows).
+  4. The search error didn't clear.
+- **What changed my mind:** the circuit-learning ML, which the fight called "the non-commodity part", does **not** learn with realistic failure rates. Same-hour real schedules with 15% failed nights give median ARI −0.03 (60 runs); it only works at ≥30% failures (median 0.69). The fight's 0.84–0.95 assumed 30% failures and random hours. The page shows the distribution, not a lucky seed, plus the devices clustering leaves alone, usually end-of-line houses: an **8th** filter that erases the worst-served house.
+- **Tests:** 10 unit (node --test) · **32/32 E2E vs prod** (`test/e2e.cjs`, phone width, fake mic fed a WAV) · 2 calibration scripts · persona 3 rounds (3 BLOCKERS → 0).
+- **Daily pull:** cron 07:30 on my Mac (`scripts/diario.sh`) → new snapshot per day → rebuild → deploy. Day 28 = 19-nov.
+
+## Blueprint conditions pass
+The T4 Fusion hadn't happened when this was built. When the Blueprint exists, I check each condition here. The design rules from my brief that the build already honors:
+
+| Rule (from my brief / the fight) | How the build honors it | Evidence |
+|---|---|---|
+| No per-house public output; ≥5 hosts, weekly, min/median/max | `publicar()`; /circuito shows only circuit numbers; per-device view labeled "ejemplo inventado, privado" | unit test + E2E "ninguna cifra por aparato antes de la vista privada" |
+| Devices send only `{circuito, llegó/se fue, hora±5, ficha}`; nothing personal stored | No DB, no auth, no forms that write; mic mode on-device | E2E: 0 POST/PUT from any page; CSP self-only |
+| The measurement is not voted; quorum only to wake others | `quorum()` used only in the "despertar" section; private view needs no confirmation | unit test |
+| Fraud judged over 14+ nights by dose–response, never one night; never flags the end-of-line house | `dosisRespuesta()` with strong-pressure minutes; limit recalibrated 240→150 | unit test + `calibrar-dosis.mjs` (0% EOL flagged, 100% cheater) + E2E |
+| Every filter publishes whom it leaves out | "N en revisión manual (no mostradas)" per alcaldía; devices left alone by clustering listed | E2E |
+| Placement decided by the tube's data, not by demand | Criterion fixed before data, shown on every card with its date | /colonias card |
+| Forbidden zone: no awareness/tips | No tips anywhere; outputs are measurements, lists, downloads | /metodo "lo que nunca hace" |
