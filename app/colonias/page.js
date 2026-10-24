@@ -1,12 +1,22 @@
 'use client'
 import { useEffect, useMemo, useState } from 'react'
 import dynamic from 'next/dynamic'
-import { elegibilidad, CRITERIO_ATIPICAS } from '../../lib/reglas.js'
+import { elegibilidad, CRITERIO_ATIPICAS, parseHorario } from '../../lib/reglas.js'
 import { norm } from '../../lib/nombres.js'
 const Mapa = dynamic(() => import('../../components/Mapa.js'), { ssr: false })
 
 const TIPO = { continuo: 'Suministro continuo', ventana_diaria: 'Ventana diaria', ventana_dias: 'Solo ciertos días', pipas: 'Abasto por pipas', sin_horario: 'Sin horario publicado' }
 const JOIN = { exacto: 'Aparece en la lista fiscal de tandeo (nombre exacto)', revision: 'Posible coincidencia con la lista fiscal: en revisión manual', posible: 'Posible coincidencia con la lista fiscal: en revisión manual', fuera: 'No aparece en la lista fiscal de tandeo (ni con el emparejamiento más generoso)' }
+
+const hora = (m) => `${Math.floor(m / 60) % 24}:${String(m % 60).padStart(2, '0')}`
+function queDice(r) {
+  if (r.tipo === 'continuo') return 'agua todo el día'
+  if (r.tipo === 'pipas') return 'aquí el agua llega en pipas'
+  if (r.tipo === 'sin_horario') return 'hoy no publica horario para tu colonia'
+  const h = parseHorario(r.horario)
+  const dias = r.tipo === 'ventana_dias' ? 'solo algunos días' : 'todos los días'
+  return h ? `agua ${dias}, de ${hora(h.inicio)} a ${hora(h.fin)} (${h.horas} horas)` : r.horario.toLowerCase()
+}
 
 export default function Colonias() {
   const [d, setD] = useState(null)
@@ -51,8 +61,18 @@ export default function Colonias() {
         <div className="card space-y-2" id="ficha">
           <div className="text-xs opacity-70">{sel.alc} · CP {sel.cp}</div>
           <div className="text-2xl font-bold">{sel.col}</div>
+          <div className="rounded-lg p-3" style={{ background: '#eef6f9' }}>
+            <b>En corto</b>
+            <ul className="mt-1 list-disc pl-5">
+              <li>La ciudad dice: {queDice(sel)}.</li>
+              <li>¿Sensor aquí? {e.estado === 'estructural' ? 'Sí: esta colonia está en la lista para el primer sensor.' : sel.tipo === 'sin_horario' || sel.atip ? `Todavía no se sabe: la ciudad no publica horario hoy. Se decide el ${CRITERIO_ATIPICAS.decision.slice(8)} de noviembre, viendo si eso pasa casi todos los días.` : 'Por ahora no: los primeros sensores van a colonias donde la ciudad no publica ningún horario. Tu colonia sí tiene uno publicado (aunque no se cumpla).'}</li>
+              <li>¿En la lista de tandeo? {sel.join === 'exacto' ? 'Sí aparece (lista de enero 2024, copiada por un noticiero; hay que confirmarla en la Gaceta).' : sel.join === 'fuera' ? 'No aparece, ni buscando nombres parecidos (lista de enero 2024; hay que confirmarla en la Gaceta).' : 'No es seguro: hay un nombre parecido que falta revisar a mano.'}</li>
+            </ul>
+            <div className="mt-1 text-xs">Lo que esto cambia en tu recibo no lo sabemos todavía. Lo que sí puedes hacer: llevar este dato a la alcaldía como «lista para revisar», no como prueba.</div>
+          </div>
+          <div className="text-sm font-semibold opacity-70">El detalle:</div>
           <div><b>Lo que publica SEGIAGUA hoy:</b> {sel.horario ? sel.horario.replace('SUMINISTRO', 'Suministro').toLowerCase().replace(/^s/, 'S') : 'no publica horario'}</div>
-          <div>Tipo: {TIPO[sel.tipo]}{sel.horas ? ` · ${sel.horas} h al día` : ''} · Fuente: {sel.fuente || 'no indicada'} · Condición atípica hoy: {sel.atip ? 'sí' : 'no'}</div>
+          <div>Tipo: {TIPO[sel.tipo]}{sel.horas ? ` · ${sel.horas} h al día` : ''} · Fuente: {sel.fuente || 'no indicada'} · ¿Hoy hay corte o falla anunciada («condición atípica»)? {sel.atip ? 'sí' : 'no'}</div>
           <div><b>¿Iría un sensor aquí?</b> <span className="tag">{e.estado.toUpperCase()}</span> {e.texto}.
             <div className="text-xs opacity-80">Regla fijada el {CRITERIO_ATIPICAS.fijado}, antes de tener datos: estructural si es atípica en ≥21 de 28 días; decisión el {CRITERIO_ATIPICAS.decision}. El sensor va donde la ciudad no publica horario, no donde alguien lo pide.</div></div>
           <div><b>Lista fiscal de tandeo (ene-2024):</b> {sel.join === 'revision' || sel.join === 'posible' ? JOIN.posible : JOIN[sel.join]} <span className="tag">HIPÓTESIS</span>

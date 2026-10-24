@@ -23,6 +23,7 @@ export default function Home() {
           <li><Link className="underline" href="/circuito">Ver el registro funcionando</Link> con aparatos <span className="sim">SIMULADO</span>: cómo se publica sin exponer a ninguna casa.</li>
         </ol>
       </div>
+      <div className="card text-sm"><b>Lo que Llave nunca hace:</b> no pide tu nombre, teléfono ni dirección; no hay cuentas; no guarda audio; no califica casas ni dice cuál casa recibió menos.</div>
       <p className="text-sm opacity-80">Último pull del API: {resumen.fecha_pull} · días guardados: {resumen.n_pulls}. Primera noche de campo con un sensor real: pendiente.</p>
     </div>
   )

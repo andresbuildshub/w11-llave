@@ -12,24 +12,33 @@ export default function ListaFiscal() {
     <div className="space-y-3">
       <h1 className="text-xl font-bold">Lista fiscal de tandeo vs. lo que publica SEGIAGUA</h1>
       <p className="text-sm">Cada año la ciudad publica en la Gaceta las colonias que «reciben agua por tandeo». Aquí cruzamos esa lista (transcripción de Uno TV, ene-2024: 284 colonias) con los horarios que publica SEGIAGUA hoy. <span className="tag">HIPÓTESIS</span> Sin el PDF de la Gaceta esto no es un hallazgo legal: es una lista para verificar.</p>
-      <div className="card overflow-x-auto">
+      <label className="text-sm">Alcaldía <select value={alc} onChange={(e) => setAlc(e.target.value)} className="rounded border p-1">{Object.keys(A).map((k) => <option key={k}>{k}</option>)}</select></label>
+      <div className="card space-y-1">
+        <b>{alc}, en corto</b>
+        <ul className="list-disc pl-5 text-sm">
+          <li>La lista de tandeo de la ciudad trae <b>{A[alc].lista_fiscal}</b> nombres de colonias de {alc}.</li>
+          <li>SEGIAGUA dice que <b>{A[alc].ventana_le8}</b> colonias de {alc} reciben agua <b>8 horas o menos</b> al día.</li>
+          <li>De esas, <b>{A[alc].ventana_le8_fuera}</b> no coinciden con ningún nombre de la lista, ni buscando nombres parecidos. Son las de abajo.</li>
+          <li><b>{rev(A[alc])}</b> nombres se parecen pero no son iguales: esos los revisamos a mano y todavía no los mostramos.</li>
+        </ul>
+      </div>
+      <details className="card overflow-x-auto"><summary className="cursor-pointer text-sm font-semibold">Ver la tabla de todas las alcaldías</summary>
         <table className="t">
           <thead><tr><th>Alcaldía</th><th>Colonias</th><th>En lista fiscal</th><th>Match exacto</th><th>En revisión manual (no mostradas)</th><th>Ventana ≤8 h</th><th>…y fuera de la lista</th></tr></thead>
           <tbody>{Object.entries(A).map(([k, x]) => (
             <tr key={k} style={k === alc ? { background: '#fff6e5' } : {}}><td><button className="underline" onClick={() => setAlc(k)}>{k}</button></td><td>{x.n}</td><td>{x.lista_fiscal}</td><td>{x.join.exacto || 0}</td><td><b>{rev(x)}</b></td><td>{x.ventana_le8}</td><td><b>{x.ventana_le8_fuera}</b></td></tr>
           ))}</tbody>
         </table>
-      </div>
-      <div className="card text-sm space-y-1">
-        <b>Cómo se empareja (reglas fijadas antes de ver la lista)</b>
+      </details>
+      <details className="card text-sm space-y-1"><summary className="cursor-pointer font-semibold">Cómo se emparejan los nombres (reglas fijadas antes de ver la lista)</summary>
         <ul className="list-disc pl-5">
           <li>Solo dentro de la misma alcaldía. Match exacto = mismo nombre normalizado (sin acentos, «COL.», puntuación; «AMPL.» → AMPLIACION; los números y SECCIÓN se respetan).</li>
           <li>Los nombres parecidos van a <b>revisión manual y no se muestran</b>. Su número sí se muestra arriba: los nombres «sucios» (BARRIO, PUEBLO, U. H., AMPLIACIÓN) son justo los de colonias populares, y un filtro que los esconde en silencio borra a quien peor está.</li>
           <li>«Fuera de la lista» es la cuenta robusta: aunque cada nombre de la lista cubriera varias colonias (quitando prefijos, comparando lo que va entre paréntesis), estas no coinciden con ninguno.</li>
         </ul>
-      </div>
+      </details>
       <div className="card">
-        <b>{alc}: {fuera.length} colonias con ventana diaria de 8 h o menos que no aparecen en la lista fiscal</b>
+        <b>Las {fuera.length} colonias de {alc} con 8 horas o menos de agua al día que no aparecen en la lista</b>
         <ul className="mt-2 max-h-96 overflow-auto text-sm">{fuera.map((r) => <li key={r.id}>{r.col} <span className="opacity-60">· {r.horas} h · {r.horario.replace('SUMINISTRO DE ', '')}</span></li>)}</ul>
         {fuera.length === 0 && <p className="text-sm">Ninguna.</p>}
       </div>

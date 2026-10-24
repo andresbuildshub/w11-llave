@@ -7,3 +7,4 @@ body{background:var(--papel);color:var(--ink)}
 .tag{display:inline-block;background:#f3e3c3;color:#6b4200;font-weight:700;font-size:12px;padding:2px 8px;border-radius:999px}
 a.btn{display:inline-block;background:var(--agua);color:#fff;padding:10px 14px;border-radius:10px;font-weight:600}
 table.t{width:100%;border-collapse:collapse;font-size:14px}table.t td,table.t th{border-bottom:1px solid #eee;padding:6px 4px;text-align:left;vertical-align:top}
+pre{white-space:pre-wrap;word-break:break-word;background:#f3f1ec;padding:8px;border-radius:8px;font-size:12px}

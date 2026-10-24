@@ -80,6 +80,16 @@ export default function Circuito() {
         <b> {ca.col}</b> ({hhmm(ha.inicio)}–{hhmm(ha.fin)}) y <b>{cb.col}</b> ({hhmm(hb.inicio)}–{hhmm(hb.fin)}). Dos válvulas (A y B), 6 casas anfitrionas cada una (la última, al final de la línea) y un sitio neutral por circuito. 14 días.
         Cada aparato manda solo: <code>{'{circuito, llegó | se fue, hora ±5 min, ficha}'}</code>.</p>
 
+      <div className="card space-y-2" style={{ background: '#eef6f9' }}>
+        <b>En corto: así se vería el registro de UN circuito</b>
+        {(() => { const p = out.pubs[0].find((x) => x.r.estado === 'publicado'); return p ? (
+          <p>En la semana 1, la ciudad publicó <b>{ha.horas} horas</b> de agua al día. Medido en las llaves: la casa que menos recibió tuvo <b>{hm(p.r.min)}</b> al día, y la mitad de las casas recibió <b>{hm(p.r.mediana)}</b> o menos. Además hubo <b>{out.sinAgua[0]}</b> noches de 14 sin nada de agua.</p>
+        ) : <p>Esta semana no hay suficientes aparatos funcionando para publicar: se dice «sin datos suficientes», nunca «0 horas».</p> })()}
+        <p className="text-sm"><b>¿Por qué no dice qué casa es?</b> Porque el número no es contra la familia: es contra lo que publicó la ciudad. Si dijéramos qué casa recibió menos, cualquiera podría señalarla (y no sabemos si es por estar al final del tubo o por otra cosa). Por eso solo se publica cuando hay al menos 5 casas, y sin nombres.</p>
+        <p className="text-xs opacity-80">Esto es una DEMOSTRACIÓN con aparatos inventados sobre el horario real de dos colonias de Iztapalapa. Tu colonia tendrá su registro cuando haya sensores.</p>
+      </div>
+
+      <details className="space-y-3"><summary className="cursor-pointer font-semibold">Ver cómo funciona por dentro (técnico)</summary>
       <div className="card space-y-2">
         <b>1 · Aprender el circuito sin el plano de válvulas (el ML del producto)</b>
         <p className="text-sm">Dos casas están en el mismo circuito si llegan juntas (≤60 min) las mismas noches. Agrupamiento aglomerativo sobre esa co-llegada.</p>
@@ -121,12 +131,14 @@ export default function Circuito() {
         <p className="text-xs opacity-80">Precio de no acusar a la casa peor servida: se escapan tramposos que solo cierran en noches que ya eran malas. Una bandera es solo «inconsistente», nunca causa: la causa es una inspección.</p>
       </div>
 
+      </details>
+
       <div className="card space-y-2">
-        <b>5 · Lo que ve solo el dueño del aparato (privado, nunca se publica)</b>
+        <b>Lo que ve solo el dueño del aparato (privado, nunca se publica)</b>
         <label className="text-sm">Aparato <select value={casa} onChange={(e) => setCasa(e.target.value)} className="rounded border p-1">{out.casas.map((a) => <option key={a.id}>{a.id}</option>)}</select></label>
         <p className="text-sm">La medición de una casa cuenta para ella sin que nadie la confirme.</p>
-        <div className="overflow-x-auto"><table className="t"><thead><tr><th>Día</th><th>Minutos con agua</th><th>Primera llegada</th></tr></thead>
-          <tbody>{s.dias.map((d) => { const e = d.porAparato[iCasa].eventos.find((x) => x.evento === 'llegó'); return <tr key={d.dia}><td>{d.dia}</td><td>{out.minutos[d.dia - 1][iCasa]}</td><td>{e ? hhmm(e.hora) : '—'}</td></tr> })}</tbody></table></div>
+        <div className="overflow-x-auto"><table className="t"><thead><tr><th>Día</th><th>Agua ese día</th><th>Primera llegada</th></tr></thead>
+          <tbody>{s.dias.map((d) => { const e = d.porAparato[iCasa].eventos.find((x) => x.evento === 'llegó'); return <tr key={d.dia}><td>{d.dia}</td><td>{out.minutos[d.dia - 1][iCasa] ? hm(out.minutos[d.dia - 1][iCasa]) : 'nada'}</td><td>{e ? hhmm(e.hora) : '—'}</td></tr> })}</tbody></table></div>
       </div>
     </div>
   )

@@ -19,6 +19,7 @@ test('tipo de suministro', () => {
   assert.equal(tipoSuministro({ horario: null }), 'sin_horario');
   assert.equal(tipoSuministro({ horario: 'SUMINISTRO LUNES DE 07:00 AM A 07:00 PM' }), 'ventana_dias');
   assert.equal(tipoSuministro({ horario: 'SUMINISTRO DE 07:00 AM A 11:00 AM' }), 'ventana_diaria');
+  assert.equal(tipoSuministro({ horario: 'SUMINISTRO LUNES , MARTES , MIÉRCOLES , JUEVES , VIERNES , SÁBADO Y DOMINGO DE 07:00 AM A 01:00 PM' }), 'ventana_diaria');
 });
 
 test('elegibilidad: criterio fijado antes de los datos', () => {

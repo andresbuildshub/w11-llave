@@ -3,8 +3,8 @@
  "n_pulls": 1,
  "total": 2006,
  "por_tipo": {
-  "ventana_diaria": 853,
-  "ventana_dias": 133,
+  "ventana_diaria": 856,
+  "ventana_dias": 130,
   "continuo": 594,
   "pipas": 112,
   "sin_horario": 314
@@ -62,9 +62,9 @@
   "CUAJIMALPA DE MORELOS": {
    "n": 49,
    "tipo": {
-    "ventana_diaria": 41,
-    "ventana_dias": 3,
-    "continuo": 5
+    "ventana_diaria": 42,
+    "continuo": 5,
+    "ventana_dias": 2
    },
    "atip": 0,
    "lista_fiscal": 14,
@@ -74,8 +74,8 @@
     "exacto": 9,
     "posible": 3
    },
-   "ventana_le8": 38,
-   "ventana_le8_fuera": 31
+   "ventana_le8": 39,
+   "ventana_le8_fuera": 32
   },
   "CUAUHTÉMOC": {
    "n": 33,
@@ -128,11 +128,11 @@
   "IZTAPALAPA": {
    "n": 290,
    "tipo": {
-    "ventana_dias": 5,
-    "ventana_diaria": 204,
+    "ventana_diaria": 205,
     "continuo": 10,
     "sin_horario": 69,
-    "pipas": 2
+    "pipas": 2,
+    "ventana_dias": 4
    },
    "atip": 69,
    "lista_fiscal": 58,
@@ -142,7 +142,7 @@
     "fuera": 184,
     "revision": 10
    },
-   "ventana_le8": 105,
+   "ventana_le8": 106,
    "ventana_le8_fuera": 58
   },
   "LA MAGDALENA CONTRERAS": {
@@ -168,8 +168,7 @@
    "n": 75,
    "tipo": {
     "continuo": 71,
-    "ventana_diaria": 3,
-    "ventana_dias": 1
+    "ventana_diaria": 4
    },
    "atip": 0,
    "lista_fiscal": 0,

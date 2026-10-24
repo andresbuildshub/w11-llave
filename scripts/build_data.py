@@ -15,7 +15,8 @@ def tipo(r):
     if r.get('supply_zone')=='PIPAS': return 'pipas'
     if 'CONTINUO' in h: return 'continuo'
     if not h: return 'sin_horario'
-    if any(d in h for d in DAYS): return 'ventana_dias'
+    n=sum(d in h for d in DAYS)
+    if 0<n<7: return 'ventana_dias'   # los 7 días listados = ventana diaria
     return 'ventana_diaria'
 def horas(h):
     m=re.findall(r'(\d{1,2}):(\d{2}) ?([AP])M',(h or '').upper())
