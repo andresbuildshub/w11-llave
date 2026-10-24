@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test": "node --test test/*.test.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.52.0",
@@ -16,5 +17,6 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.0",
     "tailwindcss": "^4.1.0"
-  }
+  },
+  "type": "module"
 }

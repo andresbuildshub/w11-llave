@@ -1,0 +1,3 @@
+YAMNet (Google) TF.js model, Apache License 2.0.
+Source: https://www.kaggle.com/models/google/yamnet/TfJs/tfjs/1 (formerly tfhub.dev/google/tfjs-model/yamnet/tfjs/1).
+Self-hosted so the phone loads it from this site; audio never leaves the device.

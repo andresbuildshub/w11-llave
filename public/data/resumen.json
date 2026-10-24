@@ -1,0 +1,293 @@
+{
+ "fecha_pull": "2026-10-23",
+ "n_pulls": 1,
+ "total": 2006,
+ "por_tipo": {
+  "ventana_diaria": 853,
+  "ventana_dias": 133,
+  "continuo": 594,
+  "pipas": 112,
+  "sin_horario": 314
+ },
+ "atipicas": 257,
+ "alcaldias": {
+  "AZCAPOTZALCO": {
+   "n": 102,
+   "tipo": {
+    "ventana_diaria": 59,
+    "sin_horario": 43
+   },
+   "atip": 43,
+   "lista_fiscal": 0,
+   "join": {
+    "fuera": 102
+   },
+   "ventana_le8": 59,
+   "ventana_le8_fuera": 59
+  },
+  "BENITO JUÁREZ": {
+   "n": 56,
+   "tipo": {
+    "ventana_diaria": 22,
+    "continuo": 32,
+    "sin_horario": 2
+   },
+   "atip": 2,
+   "lista_fiscal": 0,
+   "join": {
+    "fuera": 56
+   },
+   "ventana_le8": 20,
+   "ventana_le8_fuera": 20
+  },
+  "COYOACÁN": {
+   "n": 103,
+   "tipo": {
+    "ventana_diaria": 1,
+    "continuo": 78,
+    "ventana_dias": 2,
+    "pipas": 3,
+    "sin_horario": 19
+   },
+   "atip": 19,
+   "lista_fiscal": 5,
+   "join": {
+    "fuera": 98,
+    "exacto": 4,
+    "posible": 1
+   },
+   "ventana_le8": 1,
+   "ventana_le8_fuera": 1
+  },
+  "CUAJIMALPA DE MORELOS": {
+   "n": 49,
+   "tipo": {
+    "ventana_diaria": 41,
+    "ventana_dias": 3,
+    "continuo": 5
+   },
+   "atip": 0,
+   "lista_fiscal": 14,
+   "join": {
+    "fuera": 36,
+    "revision": 1,
+    "exacto": 9,
+    "posible": 3
+   },
+   "ventana_le8": 38,
+   "ventana_le8_fuera": 31
+  },
+  "CUAUHTÉMOC": {
+   "n": 33,
+   "tipo": {
+    "ventana_diaria": 33
+   },
+   "atip": 0,
+   "lista_fiscal": 0,
+   "join": {
+    "fuera": 33
+   },
+   "ventana_le8": 33,
+   "ventana_le8_fuera": 33
+  },
+  "GUSTAVO A. MADERO": {
+   "n": 238,
+   "tipo": {
+    "ventana_diaria": 214,
+    "sin_horario": 18,
+    "pipas": 1,
+    "ventana_dias": 5
+   },
+   "atip": 14,
+   "lista_fiscal": 24,
+   "join": {
+    "fuera": 198,
+    "posible": 23,
+    "exacto": 13,
+    "revision": 4
+   },
+   "ventana_le8": 172,
+   "ventana_le8_fuera": 154
+  },
+  "IZTACALCO": {
+   "n": 43,
+   "tipo": {
+    "ventana_diaria": 37,
+    "pipas": 1,
+    "ventana_dias": 2,
+    "sin_horario": 3
+   },
+   "atip": 3,
+   "lista_fiscal": 0,
+   "join": {
+    "fuera": 43
+   },
+   "ventana_le8": 37,
+   "ventana_le8_fuera": 37
+  },
+  "IZTAPALAPA": {
+   "n": 290,
+   "tipo": {
+    "ventana_dias": 5,
+    "ventana_diaria": 204,
+    "continuo": 10,
+    "sin_horario": 69,
+    "pipas": 2
+   },
+   "atip": 69,
+   "lista_fiscal": 58,
+   "join": {
+    "exacto": 27,
+    "posible": 69,
+    "fuera": 184,
+    "revision": 10
+   },
+   "ventana_le8": 105,
+   "ventana_le8_fuera": 58
+  },
+  "LA MAGDALENA CONTRERAS": {
+   "n": 53,
+   "tipo": {
+    "ventana_diaria": 19,
+    "sin_horario": 26,
+    "continuo": 7,
+    "ventana_dias": 1
+   },
+   "atip": 26,
+   "lista_fiscal": 30,
+   "join": {
+    "fuera": 23,
+    "exacto": 25,
+    "posible": 3,
+    "revision": 2
+   },
+   "ventana_le8": 19,
+   "ventana_le8_fuera": 10
+  },
+  "MIGUEL HIDALGO": {
+   "n": 75,
+   "tipo": {
+    "continuo": 71,
+    "ventana_diaria": 3,
+    "ventana_dias": 1
+   },
+   "atip": 0,
+   "lista_fiscal": 0,
+   "join": {
+    "fuera": 75
+   },
+   "ventana_le8": 3,
+   "ventana_le8_fuera": 3
+  },
+  "MILPA ALTA": {
+   "n": 34,
+   "tipo": {
+    "ventana_dias": 5,
+    "ventana_diaria": 25,
+    "pipas": 1,
+    "continuo": 3
+   },
+   "atip": 0,
+   "lista_fiscal": 4,
+   "join": {
+    "fuera": 28,
+    "posible": 6
+   },
+   "ventana_le8": 19,
+   "ventana_le8_fuera": 14
+  },
+  "TLALPAN": {
+   "n": 243,
+   "tipo": {
+    "ventana_dias": 4,
+    "pipas": 37,
+    "continuo": 115,
+    "sin_horario": 86,
+    "ventana_diaria": 1
+   },
+   "atip": 38,
+   "lista_fiscal": 94,
+   "join": {
+    "posible": 42,
+    "fuera": 146,
+    "exacto": 36,
+    "revision": 19
+   },
+   "ventana_le8": 1,
+   "ventana_le8_fuera": 0
+  },
+  "TLÁHUAC": {
+   "n": 169,
+   "tipo": {
+    "ventana_diaria": 73,
+    "ventana_dias": 76,
+    "sin_horario": 12,
+    "pipas": 7,
+    "continuo": 1
+   },
+   "atip": 9,
+   "lista_fiscal": 26,
+   "join": {
+    "fuera": 126,
+    "posible": 33,
+    "revision": 2,
+    "exacto": 8
+   },
+   "ventana_le8": 69,
+   "ventana_le8_fuera": 63
+  },
+  "VENUSTIANO CARRANZA": {
+   "n": 74,
+   "tipo": {
+    "ventana_diaria": 70,
+    "sin_horario": 4
+   },
+   "atip": 4,
+   "lista_fiscal": 0,
+   "join": {
+    "fuera": 74
+   },
+   "ventana_le8": 70,
+   "ventana_le8_fuera": 70
+  },
+  "XOCHIMILCO": {
+   "n": 179,
+   "tipo": {
+    "ventana_diaria": 30,
+    "pipas": 57,
+    "continuo": 37,
+    "ventana_dias": 26,
+    "sin_horario": 29
+   },
+   "atip": 27,
+   "lista_fiscal": 16,
+   "join": {
+    "fuera": 153,
+    "posible": 25,
+    "exacto": 1
+   },
+   "ventana_le8": 7,
+   "ventana_le8_fuera": 4
+  },
+  "ÁLVARO OBREGÓN": {
+   "n": 265,
+   "tipo": {
+    "ventana_diaria": 21,
+    "ventana_dias": 3,
+    "continuo": 235,
+    "pipas": 3,
+    "sin_horario": 3
+   },
+   "atip": 3,
+   "lista_fiscal": 13,
+   "join": {
+    "fuera": 247,
+    "revision": 2,
+    "posible": 10,
+    "exacto": 6
+   },
+   "ventana_le8": 1,
+   "ventana_le8_fuera": 1
+  }
+ }
+}
