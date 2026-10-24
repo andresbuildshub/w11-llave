@@ -11,15 +11,16 @@ export default function ListaFiscal() {
   return (
     <div className="space-y-3">
       <h1 className="text-xl font-bold">Lista fiscal de tandeo vs. lo que publica SEGIAGUA</h1>
-      <p className="text-sm">Cada año la ciudad publica en la Gaceta las colonias que «reciben agua por tandeo». Aquí cruzamos esa lista (transcripción de Uno TV, ene-2024: 284 colonias) con los horarios que publica SEGIAGUA hoy. <span className="tag">HIPÓTESIS</span> Sin el PDF de la Gaceta esto no es un hallazgo legal: es una lista para verificar.</p>
+      <p className="text-sm"><b>¿Qué es?</b> Una lista oficial de colonias que la ciudad reconoce que reciben agua por tandeo. Según notas de prensa, a esas tomas se les cobra el agua de otra forma (por verificar). Cada año la ciudad publica en la Gaceta las colonias que «reciben agua por tandeo». Aquí cruzamos esa lista (transcripción de Uno TV, ene-2024: 284 colonias) con los horarios que publica SEGIAGUA hoy. <span className="tag">HIPÓTESIS</span> Sin el PDF de la Gaceta esto no es un hallazgo legal: es una lista para verificar.</p>
       <label className="text-sm">Alcaldía <select value={alc} onChange={(e) => setAlc(e.target.value)} className="rounded border p-1">{Object.keys(A).map((k) => <option key={k}>{k}</option>)}</select></label>
       <div className="card space-y-1">
         <b>{alc}, en corto</b>
         <ul className="list-disc pl-5 text-sm">
           <li>La lista de tandeo de la ciudad trae <b>{A[alc].lista_fiscal}</b> nombres de colonias de {alc}.</li>
           <li>SEGIAGUA dice que <b>{A[alc].ventana_le8}</b> colonias de {alc} reciben agua <b>8 horas o menos</b> al día.</li>
-          <li>De esas, <b>{A[alc].ventana_le8_fuera}</b> no coinciden con ningún nombre de la lista, ni buscando nombres parecidos. Son las de abajo.</li>
-          <li><b>{rev(A[alc])}</b> nombres se parecen pero no son iguales: esos los revisamos a mano y todavía no los mostramos.</li>
+          <li>De esas {A[alc].ventana_le8}, <b>{A[alc].ventana_le8_fuera}</b> no coinciden con ningún nombre de la lista, ni buscando nombres parecidos. Son las de abajo.</li>
+          <li>Aparte, en toda la alcaldía hay <b>{rev(A[alc])}</b> colonias con un nombre parecido (no igual) a uno de la lista: esas falta revisarlas a mano y todavía no las mostramos.</li>
+          <li><b>Qué puedes hacer:</b> si tu colonia está abajo, llévala a la alcaldía o a SEGIAGUA como «lista para revisar», no como prueba.</li>
         </ul>
       </div>
       <details className="card overflow-x-auto"><summary className="cursor-pointer text-sm font-semibold">Ver la tabla de todas las alcaldías</summary>

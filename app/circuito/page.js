@@ -81,9 +81,9 @@ export default function Circuito() {
         Cada aparato manda solo: <code>{'{circuito, llegó | se fue, hora ±5 min, ficha}'}</code>.</p>
 
       <div className="card space-y-2" style={{ background: '#eef6f9' }}>
-        <b>En corto: así se vería el registro de UN circuito</b>
+        <b>En corto: así se vería el registro de UN circuito (una válvula que surte a varias casas de {ca.col})</b>
         {(() => { const p = out.pubs[0].find((x) => x.r.estado === 'publicado'); return p ? (
-          <p>En la semana 1, la ciudad publicó <b>{ha.horas} horas</b> de agua al día. Medido en las llaves: la casa que menos recibió tuvo <b>{hm(p.r.min)}</b> al día, y la mitad de las casas recibió <b>{hm(p.r.mediana)}</b> o menos. Además hubo <b>{out.sinAgua[0]}</b> noches de 14 sin nada de agua.</p>
+          <p>En la semana 1, la ciudad publicó <b>{ha.horas} horas</b> de agua al día. Medido en las llaves: la casa que menos recibió tuvo <b>{hm(p.r.min)}</b> al día, y la mitad de las casas recibió <b>{hm(p.r.mediana)}</b> o menos. Además hubo <b>{out.sinAgua[0]}</b> días de 14 sin nada de agua.</p>
         ) : <p>Esta semana no hay suficientes aparatos funcionando para publicar: se dice «sin datos suficientes», nunca «0 horas».</p> })()}
         <p className="text-sm"><b>¿Por qué no dice qué casa es?</b> Porque el número no es contra la familia: es contra lo que publicó la ciudad. Si dijéramos qué casa recibió menos, cualquiera podría señalarla (y no sabemos si es por estar al final del tubo o por otra cosa). Por eso solo se publica cuando hay al menos 5 casas, y sin nombres.</p>
         <p className="text-xs opacity-80">Esto es una DEMOSTRACIÓN con aparatos inventados sobre el horario real de dos colonias de Iztapalapa. Tu colonia tendrá su registro cuando haya sensores.</p>
@@ -113,7 +113,7 @@ export default function Circuito() {
             ))}
           </div>
         ))}
-        <p className="text-sm">Publicado por SEGIAGUA: A {ha.horas} h/día · B {hb.horas} h/día. Noches sin nada confirmadas por el sitio neutral: A {out.sinAgua[0]} de 14 · B {out.sinAgua[1]} de 14.</p>
+        <p className="text-sm">Publicado por SEGIAGUA: A {ha.horas} h/día · B {hb.horas} h/día. Días sin nada confirmados por el sitio neutral: A {out.sinAgua[0]} de 14 · B {out.sinAgua[1]} de 14.</p>
       </div>
 
       <div className="card space-y-2">

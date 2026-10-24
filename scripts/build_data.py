@@ -51,7 +51,8 @@ for cid,r in last.items():
         'lat':float(r['latitude']) if r.get('latitude') else None,'lon':float(r['longitude']) if r.get('longitude') else None,
         'horario':r.get('hours_of_service') or None,'fuente':r.get('supply_zone'),'atip':bool(r.get('is_atypical_condition')),
         'tipo':t,'horas':horas(r.get('hours_of_service')) if t=='ventana_diaria' else None,
-        'dias_pull':len([x for x in hist if x]),'dias_atip':atip,'join':join})
+        'dias_pull':len([x for x in hist if x]),'dias_atip':atip,'join':join,
+        'hist':[{'fecha':pulls[k][0],'horario':x.get('hours_of_service') or None,'fuente':x.get('supply_zone'),'atip':bool(x.get('is_atypical_condition'))} for k,x in enumerate(hist) if x]})
 # NOTE: "join" is computed for every colonia, but the app only DISPLAYS 'exacto' as a match;
 # 'revision' is counted per alcaldía and shown as "en revisión manual (no mostradas)".
 os.makedirs(os.path.join(ROOT,'public/data'),exist_ok=True)
