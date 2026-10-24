@@ -2,3 +2,5 @@ node_modules/
 .next/
 .vercel
 .env*.local
+scripts/puller/node_modules
+logs/
