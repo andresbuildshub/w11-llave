@@ -12,6 +12,7 @@ export default function Colonias() {
   const [d, setD] = useState(null)
   const [alc, setAlc] = useState('IZTAPALAPA')
   const [q, setQ] = useState('')
+  const [raw, setRaw] = useState('')
   const [err, setErr] = useState('')
   const [sel, setSel] = useState(null)
   useEffect(() => { fetch('/data/colonias.json').then((r) => r.json()).then(setD) }, [])
@@ -22,6 +23,7 @@ export default function Colonias() {
     return d.rows.filter((r) => r.alc === alc && (!nq || norm(r.col).includes(nq))).sort((a, b) => a.col.localeCompare(b.col))
   }, [d, alc, q])
   function onQ(v) {
+    setRaw(v.slice(0, 60))
     if (v.length > 60) return setErr('Máximo 60 caracteres.')
     if (/[^\p{L}\p{N}\s.\-()]/u.test(v)) return setErr('Solo letras, números y espacios.')
     setErr(''); setQ(v)
@@ -39,7 +41,7 @@ export default function Colonias() {
           </select>
         </label>
         <label className="text-sm">Buscar colonia{' '}
-          <input value={q} onChange={(e) => onQ(e.target.value)} placeholder="ej. Paraje San Juan" className="rounded border p-1" maxLength={60} />
+          <input value={raw} onChange={(e) => onQ(e.target.value)} placeholder="ej. Paraje San Juan" className="rounded border p-1" maxLength={60} />
         </label>
       </div>
       {err && <p className="text-sm text-red-700">{err}</p>}

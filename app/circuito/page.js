@@ -19,15 +19,16 @@ export default function Circuito() {
   const [rows, setRows] = useState(null)
   const [tramposo, setTramposo] = useState(false)
   const [casa, setCasa] = useState('A-2')
+  const [pFalla, setPFalla] = useState(0.3)
   useEffect(() => { fetch('/data/colonias.json').then((r) => r.json()).then((d) => setRows(d.rows)) }, [])
 
   const sim = useMemo(() => {
     if (!rows) return null
     const [ca, cb] = elegirColonias(rows)
     const ha = parseHorario(ca.horario), hb = parseHorario(cb.horario)
-    const s = simular({ circuitos: [{ clave: 'A', inicio: ha.inicio, horas: ha.horas, casas: 6 }, { clave: 'B', inicio: hb.inicio, horas: hb.horas, casas: 6 }], dias: 14, semilla: 11 })
+    const s = simular({ circuitos: [{ clave: 'A', inicio: ha.inicio, horas: ha.horas, casas: 6 }, { clave: 'B', inicio: hb.inicio, horas: hb.horas, casas: 6 }], dias: 14, semilla: 11, pFalla })
     return { ca, cb, ha, hb, s }
-  }, [rows])
+  }, [rows, pFalla])
 
   const out = useMemo(() => {
     if (!sim) return null
@@ -65,7 +66,8 @@ export default function Circuito() {
       return { id: a.id, rol: a.rol, ...dosisRespuesta(noches, s.dias.map((d) => minutos[d.dia - 1][ids.indexOf(a.id)])) }
     })
     const sinAgua = [0, 1].map((c) => s.dias.filter((d) => minutos[d.dia - 1][ids.indexOf(c === 0 ? 'A-N' : 'B-N')] === 0).length)
-    return { ids, minutos, lab, ari: ari(verdad, lab), q, pubs, dosis, sinAgua, casas }
+    const solos = casas.filter((_, i) => lab.filter((x) => x === lab[i]).length === 1).map((a) => a.id)
+    return { ids, minutos, lab, ari: ari(verdad, lab), q, pubs, dosis, sinAgua, casas, solos }
   }, [sim, tramposo])
 
   if (!sim || !out) return <p>Simulando 14 días…</p>
@@ -82,7 +84,11 @@ export default function Circuito() {
         <b>1 · Aprender el circuito sin el plano de válvulas (el ML del producto)</b>
         <p className="text-sm">Dos casas están en el mismo circuito si llegan juntas (≤60 min) las mismas noches. Agrupamiento aglomerativo sobre esa co-llegada.</p>
         <div className="flex flex-wrap gap-2 text-sm">{out.casas.map((a, i) => <span key={a.id} className="rounded border px-2 py-1" style={{ background: ['#dbeef6', '#fde7c8', '#e5dcf3', '#e0f0df'][out.lab[i] % 4] }}>{a.id}</span>)}</div>
-        <p className="text-sm">Coincidencia con la válvula real (ARI): <b>{out.ari.toFixed(2)}</b> (1 = perfecto). En esta demo cada válvula coincide con una colonia; en la ciudad no tiene por qué. Solo separa circuitos cuyas fallas son independientes.</p>
+        <label className="text-sm">Noches en que la red no entrega nada: <select value={pFalla} onChange={(e) => setPFalla(+e.target.value)} className="rounded border p-1">
+          <option value={0.15}>15%</option><option value={0.3}>30%</option><option value={0.5}>50%</option></select></label>
+        <p className="text-sm">Coincidencia con la válvula real en esta corrida (ARI): <b>{out.ari.toFixed(2)}</b> (1 = perfecto). En esta demo cada válvula coincide con una colonia; en la ciudad no tiene por qué. Solo separa circuitos cuyas fallas son independientes.</p>
+        <p className="text-sm"><b>Lo honesto:</b> una corrida no prueba nada. En 60 corridas por escenario (ARI mediana · peor 10% · mejor 10%): con 15% de noches fallidas <b>−0.03 · −0.05 · 0.69</b> (no aprende); con 30%, <b>0.69 · −0.03 · 0.85</b>; con 50%, <b>0.69 · 0.69 · 0.85</b>. Con horarios reales que arrancan a la misma hora, el circuito solo se aprende si falla seguido. Si no aprende, se publica por colonia y se dice.</p>
+        {out.solos.length > 0 && <p className="text-sm">Aparatos que el agrupamiento dejó solos y por eso <b>no entran a ninguna publicación</b>: {out.solos.join(', ')}. Su medición sigue contando para su casa. Suelen ser las casas del final de la línea: el agua les llega tarde y no «llegan juntas» con nadie.</p>}
       </div>
 
       <div className="card space-y-2">

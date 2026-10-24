@@ -1,9 +1,12 @@
 # Decisions — w11-llave
 
-> Session close ritual, every session: one line per decision with the why, tomorrow's first move at the top, commit, push. This file is where the Week 12 Extraction gets mined from.
-
-**Tomorrow's first move:**
-
----
-
-<!-- newest first: YYYY-MM-DD — decision — why -->
+## 2026-10-23 · session 1 (build right after the Brain Bending fight)
+- **Product = delivery ledger, not an alarm.** The fight killed the alarm (a ~MX$100 float captures water without waking anyone; NextDrop's RCT: null-to-modest welfare). What survives: published promise vs measured arrival, per circuit, never per house.
+- **Real data first, sensors simulated.** SEGIAGUA's open API (2,006 colonias) is real and pulled daily; devices on /circuito are SIMULADO and labeled on every panel. No hardware this week (field night owed; kill criterion in w11-fight/tests/campo-CRITERIO-MUERTE.md).
+- **The API only answers browsers** (TLS reset to curl/Node), so the daily pull runs in headless Chromium on my Mac (cron 07:30), writes `data/history/YYYY-MM-DD.json` (never overwrites), rebuilds and redeploys.
+- **No database, no auth, no keys:** nothing personal is stored, so the security floor's auth/RLS items don't apply; CSP self-only + OSM tiles; microphone allowed only for this origin; mic mode sends nothing (E2E checks no POST/PUT from any page).
+- **Bug 1 (E2E):** the "cheater" toggle closed the valve on fixed days that were often weak/no-water nights, so it was never caught. Fixed: it uses the 4 strongest delivery nights, as the label says.
+- **Bug 2 (E2E, deeper):** the dose–response limit 240 min came from the fight's simulations (3–6 h nights). On Iztapalapa's real 4–5 h windows it never fires (cheater caught 0%). Recalibrated on 200 simulated circuits (`test/calibrar-dosis.mjs`): 150 min → end-of-line flagged 0%, cheater caught 100%; 90 → 6% end-of-line flagged.
+- **Finding that changed my mind (screenshot review):** the demo showed ARI 0.85, a single lucky seed. Over 60 runs (`test/calibrar-circuito.mjs`) with same-hour real schedules: 15% failed nights → median ARI −0.03 (doesn't learn); 30% → 0.69; 50% → 0.69. The fight's 0.84–0.95 assumed 30% failures and random hours. The circuit ML only works where water fails often. The page now shows the distribution, a failure-rate selector, and the devices the clustering leaves alone (usually end-of-line houses: an 8th filter that erases the worst-served house). Fallback: publish by colonia and say so.
+- **Search box:** invalid input kept the error on screen after correcting (controlled input bug). Fixed with a raw/validated split.
+- Next first move: persona test (Lupita, COPACO Iztapalapa); then cron for the daily pull.
